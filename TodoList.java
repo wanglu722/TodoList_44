@@ -46,6 +46,8 @@ public class TodoList {
         System.out.println("4. 删除待办事项");
         System.out.println("5. 编辑待办事项"); // 原代码的“5.退出”被改成编辑
         System.out.println("6. 退出程序"); // 新增退出项
+        System.out.println("5. 批量删除待办"); // 与feature/edit的“5.编辑”冲突
+        System.out.println("6. 退出程序"); // 看似相同，但菜单含义冲突
         System.out.println("========================");
     }
 
@@ -97,7 +99,7 @@ public class TodoList {
         }
     }
 
-    // 删除待办
+    // 删除待办（新增确认逻辑，与原代码/feature/edit的deleteTodo冲突）
     private static void deleteTodo() {
         if (todoList.isEmpty()) {
             System.out.println("📄 暂无待办事项～");
@@ -108,6 +110,13 @@ public class TodoList {
         try {
             int index = Integer.parseInt(scanner.nextLine()) - 1;
             if (index >= 0 && index < todoList.size()) {
+                // 与原代码/feature/edit的deleteTodo此处无代码冲突
+                System.out.print("确认删除「" + todoList.get(index).getContent() + "」吗？(y/n)：");
+                String confirm = scanner.nextLine().trim();
+                if (!confirm.equalsIgnoreCase("y")) {
+                    System.out.println("🚫 取消删除！");
+                    return;
+                }
                 TodoItem deletedItem = todoList.remove(index);
                 System.out.println("🗑️ 已删除待办：" + deletedItem.getContent());
             } else {
@@ -144,6 +153,17 @@ public class TodoList {
         } catch (NumberFormatException e) {
             System.out.println("❌ 请输入有效的数字！");
         }
+    // 新增：批量删除功能（与feature/edit的editTodo冲突）
+    private static void batchDeleteTodo() {
+        if (todoList.isEmpty()) {
+            System.out.println("📄 暂无待办事项～");
+            return;
+        }
+        viewTodos();
+        System.out.print("请输入要批量删除的序号范围（如1-3）：");
+        String range = scanner.nextLine().trim();
+        // 简化逻辑，仅用于制造冲突
+        System.out.println("🗑️ 批量删除待办成功！");
     }
 
     // 主方法（程序入口）
@@ -169,6 +189,7 @@ public class TodoList {
                     break;
                 case "5":
                     editTodo(); // 5号对应编辑
+                    batchDeleteTodo(); // 与feature/edit的“5.editTodo”冲突
                     break;
                 case "6":
                     System.out.println("👋 退出程序，再见！");
