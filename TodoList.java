@@ -107,6 +107,8 @@ public class TodoList {
         try {
             int index = Integer.parseInt(scanner.nextLine()) - 1;
             if (index >= 0 && index < todoList.size()) {
+             // 与add-edit-function分支的删除逻辑冲突：添加不同提示
+            System.out.println("⚠️ 此操作不可逆，确认删除？"); 
             //  新增的删除确认代码（从这里开始）
             System.out.print("确认删除「" + todoList.get(index).getContent() + "」吗？(y/n)：");
             String confirm = scanner.nextLine().trim();
@@ -156,38 +158,41 @@ private static void editTodo() {
 
     // 主方法（程序入口）
     public static void main(String[] args) {
-        System.out.println("欢迎使用简单待办事项管理工具！");
-        while (true) {
-            showMenu();
-            System.out.print("请输入操作编号（1-5）：");
-            String choice = scanner.nextLine().trim();
+    System.out.println("欢迎使用简单待办事项管理工具！");
+    while (true) {
+        showMenu();
+        System.out.print("请输入操作编号（1-6）："); // 提示文字也稍作修改
+        String choice = scanner.nextLine().trim();
 
-            switch (choice) {
-                case "1":
-                    addTodo();
-                    break;
-                case "2":
-                    viewTodos();
-                    break;
-                case "3":
-                    markAsCompleted();
-                    break;
-                case "4":
-                    deleteTodo();
-                    break;
-                case "5":
-                    editTodo(); // 新增编辑分支
-                    break;
-                case "6": // 原5改成6
+        switch (choice) {
+            case "1":
+                addTodo();
+                break;
+            case "2":
+                viewTodos();
+                break;
+            case "3":
+                markAsCompleted();
+                break;
+            case "4":
+                deleteTodo();
+                break;
+            // 与编辑分支冲突：故意交换编号逻辑
+            case "5": 
                 System.out.println("👋 退出程序，再见！");
                 scanner.close();
                 System.exit(0);
-                default:
-                    System.out.println("❌ 输入错误，请输入1-5的数字！");
-            }
+                break;
+            case "6": 
+                editTodo(); // 编辑功能用6号（与编辑分支的5号冲突）
+                break;
+            default:
+                System.out.println("❌ 输入错误，请输入1-6的数字！");
         }
     }
+}
 
 }
+
 
 
