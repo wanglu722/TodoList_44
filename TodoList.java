@@ -17,11 +17,7 @@ class TodoItem {
     public String getContent() {
         return content;
     }
-    
-    // 在TodoItem类的getter/setter区域新增
-public void setContent(String content) {
-    this.content = content;
-}
+
     public boolean isCompleted() {
         return isCompleted;
     }
@@ -36,18 +32,18 @@ public class TodoList {
     private static List<TodoItem> todoList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
+    // 显示功能菜单
     private static void showMenu() {
-    System.out.println("\n===== 待办事项管理 =====");
-    System.out.println("1. 添加待办事项");
-    System.out.println("2. 查看所有待办");
-    System.out.println("3. 标记待办为完成");
-    System.out.println("4. 删除待办事项");
-    // 与add-edit-function分支的"5.编辑待办"冲突：故意用不同编号
-    System.out.println("5. 退出程序"); 
-    System.out.println("6. 编辑待办事项"); // 这里与编辑分支的编号相反
-    System.out.println("========================");
+        System.out.println("\n===== 待办事项管理 =====");
+        System.out.println("1. 添加待办事项");
+        System.out.println("2. 查看所有待办");
+        System.out.println("3. 标记待办为完成");
+        System.out.println("4. 删除待办事项");
+        System.out.println("5. 批量删除待办"); // 与feature/edit的“5.编辑”冲突
+        System.out.println("6. 退出程序"); // 看似相同，但菜单含义冲突
+        System.out.println("========================");
     }
-    
+
     // 添加待办
     private static void addTodo() {
         System.out.print("请输入待办事项内容：");
@@ -96,7 +92,7 @@ public class TodoList {
         }
     }
 
-    // 删除待办
+    // 删除待办（新增确认逻辑，与原代码/feature/edit的deleteTodo冲突）
     private static void deleteTodo() {
         if (todoList.isEmpty()) {
             System.out.println("📄 暂无待办事项～");
@@ -107,16 +103,13 @@ public class TodoList {
         try {
             int index = Integer.parseInt(scanner.nextLine()) - 1;
             if (index >= 0 && index < todoList.size()) {
-             // 与add-edit-function分支的删除逻辑冲突：添加不同提示
-            System.out.println("⚠️ 此操作不可逆，确认删除？"); 
-            //  新增的删除确认代码（从这里开始）
-            System.out.print("确认删除「" + todoList.get(index).getContent() + "」吗？(y/n)：");
-            String confirm = scanner.nextLine().trim();
-            if (!confirm.equalsIgnoreCase("y")) {
-                System.out.println("🚫 取消删除！");
-                return;
-            }
-            // 新增的删除确认代码（到这里结束）
+                // 与原代码/feature/edit的deleteTodo此处无代码冲突
+                System.out.print("确认删除「" + todoList.get(index).getContent() + "」吗？(y/n)：");
+                String confirm = scanner.nextLine().trim();
+                if (!confirm.equalsIgnoreCase("y")) {
+                    System.out.println("🚫 取消删除！");
+                    return;
+                }
                 TodoItem deletedItem = todoList.remove(index);
                 System.out.println("🗑️ 已删除待办：" + deletedItem.getContent());
             } else {
@@ -127,72 +120,50 @@ public class TodoList {
         }
     }
 
-    // 新增：编辑待办内容
-private static void editTodo() {
-    if (todoList.isEmpty()) {
-        System.out.println("📄 暂无待办事项～");
-        return;
-    }
-    viewTodos();
-    System.out.print("请输入要编辑的待办序号：");
-    try {
-        int index = Integer.parseInt(scanner.nextLine()) - 1;
-        if (index >= 0 && index < todoList.size()) {
-            TodoItem item = todoList.get(index);
-            System.out.print("当前内容：" + item.getContent() + "，请输入新内容：");
-            String newContent = scanner.nextLine().trim();
-            if (newContent.isEmpty()) {
-                System.out.println("❌ 新内容不能为空！");
-                return;
-            }
-            // 替换原有内容（TodoItem没有setContent，先新增这个方法）
-            item.setContent(newContent); 
-            System.out.println("✏️ 已编辑待办，新内容：" + newContent);
-        } else {
-            System.out.println("❌ 序号不存在！");
+    // 新增：批量删除功能（与feature/edit的editTodo冲突）
+    private static void batchDeleteTodo() {
+        if (todoList.isEmpty()) {
+            System.out.println("📄 暂无待办事项～");
+            return;
         }
-    } catch (NumberFormatException e) {
-        System.out.println("❌ 请输入有效的数字！");
+        viewTodos();
+        System.out.print("请输入要批量删除的序号范围（如1-3）：");
+        String range = scanner.nextLine().trim();
+        // 简化逻辑，仅用于制造冲突
+        System.out.println("🗑️ 批量删除待办成功！");
     }
-}
 
     // 主方法（程序入口）
     public static void main(String[] args) {
-    System.out.println("欢迎使用简单待办事项管理工具！");
-    while (true) {
-        showMenu();
-        System.out.print("请输入操作编号（1-6）："); // 提示文字也稍作修改
-        String choice = scanner.nextLine().trim();
+        System.out.println("欢迎使用简单待办事项管理工具！");
+        while (true) {
+            showMenu();
+            System.out.print("请输入操作编号（1-6）：");
+            String choice = scanner.nextLine().trim();
 
-        switch (choice) {
-            case "1":
-                addTodo();
-                break;
-            case "2":
-                viewTodos();
-                break;
-            case "3":
-                markAsCompleted();
-                break;
-            case "4":
-                deleteTodo();
-                break;
-            // 与编辑分支冲突：故意交换编号逻辑
-            case "5": 
-                System.out.println("👋 退出程序，再见！");
-                scanner.close();
-                System.exit(0);
-                break;
-            case "6": 
-                editTodo(); // 编辑功能用6号（与编辑分支的5号冲突）
-                break;
-            default:
-                System.out.println("❌ 输入错误，请输入1-6的数字！");
+            switch (choice) {
+                case "1":
+                    addTodo();
+                    break;
+                case "2":
+                    viewTodos();
+                    break;
+                case "3":
+                    markAsCompleted();
+                    break;
+                case "4":
+                    deleteTodo();
+                    break;
+                case "5":
+                    batchDeleteTodo(); // 与feature/edit的“5.editTodo”冲突
+                    break;
+                case "6":
+                    System.out.println("👋 退出程序，再见！");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("❌ 输入错误，请输入1-6的数字！");
+            }
         }
     }
 }
-
-}
-
-
-
