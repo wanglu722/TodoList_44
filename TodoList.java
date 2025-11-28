@@ -107,6 +107,14 @@ public class TodoList {
         try {
             int index = Integer.parseInt(scanner.nextLine()) - 1;
             if (index >= 0 && index < todoList.size()) {
+            //  新增的删除确认代码（从这里开始）
+            System.out.print("确认删除「" + todoList.get(index).getContent() + "」吗？(y/n)：");
+            String confirm = scanner.nextLine().trim();
+            if (!confirm.equalsIgnoreCase("y")) {
+                System.out.println("🚫 取消删除！");
+                return;
+            }
+            // 新增的删除确认代码（到这里结束）
                 TodoItem deletedItem = todoList.remove(index);
                 System.out.println("🗑️ 已删除待办：" + deletedItem.getContent());
             } else {
@@ -181,3 +189,4 @@ private static void editTodo() {
     }
 
 }
+
