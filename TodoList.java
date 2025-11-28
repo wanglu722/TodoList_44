@@ -17,11 +17,12 @@ class TodoItem {
     public String getContent() {
         return content;
     }
-    
-    // 在TodoItem类的getter/setter区域新增
-public void setContent(String content) {
-    this.content = content;
-}
+
+    // 新增：编辑功能需要的setter
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public boolean isCompleted() {
         return isCompleted;
     }
@@ -43,8 +44,8 @@ public class TodoList {
         System.out.println("2. 查看所有待办");
         System.out.println("3. 标记待办为完成");
         System.out.println("4. 删除待办事项");
-        System.out.println("5. 编辑待办事项"); // 新增
-        System.out.println("6. 退出程序"); // 原5改成6
+        System.out.println("5. 编辑待办事项"); // 原代码的“5.退出”被改成编辑
+        System.out.println("6. 退出程序"); // 新增退出项
         System.out.println("========================");
     }
 
@@ -117,41 +118,40 @@ public class TodoList {
         }
     }
 
-    // 新增：编辑待办内容
-private static void editTodo() {
-    if (todoList.isEmpty()) {
-        System.out.println("📄 暂无待办事项～");
-        return;
-    }
-    viewTodos();
-    System.out.print("请输入要编辑的待办序号：");
-    try {
-        int index = Integer.parseInt(scanner.nextLine()) - 1;
-        if (index >= 0 && index < todoList.size()) {
-            TodoItem item = todoList.get(index);
-            System.out.print("当前内容：" + item.getContent() + "，请输入新内容：");
-            String newContent = scanner.nextLine().trim();
-            if (newContent.isEmpty()) {
-                System.out.println("❌ 新内容不能为空！");
-                return;
-            }
-            // 替换原有内容（TodoItem没有setContent，先新增这个方法）
-            item.setContent(newContent); 
-            System.out.println("✏️ 已编辑待办，新内容：" + newContent);
-        } else {
-            System.out.println("❌ 序号不存在！");
+    // 新增：编辑待办功能
+    private static void editTodo() {
+        if (todoList.isEmpty()) {
+            System.out.println("📄 暂无待办事项～");
+            return;
         }
-    } catch (NumberFormatException e) {
-        System.out.println("❌ 请输入有效的数字！");
+        viewTodos();
+        System.out.print("请输入要编辑的待办序号：");
+        try {
+            int index = Integer.parseInt(scanner.nextLine()) - 1;
+            if (index >= 0 && index < todoList.size()) {
+                TodoItem item = todoList.get(index);
+                System.out.print("当前内容：" + item.getContent() + "，请输入新内容：");
+                String newContent = scanner.nextLine().trim();
+                if (newContent.isEmpty()) {
+                    System.out.println("❌ 新内容不能为空！");
+                    return;
+                }
+                item.setContent(newContent);
+                System.out.println("✏️ 已编辑待办，新内容：" + newContent);
+            } else {
+                System.out.println("❌ 序号不存在！");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("❌ 请输入有效的数字！");
+        }
     }
-}
 
     // 主方法（程序入口）
     public static void main(String[] args) {
         System.out.println("欢迎使用简单待办事项管理工具！");
         while (true) {
             showMenu();
-            System.out.print("请输入操作编号（1-5）：");
+            System.out.print("请输入操作编号（1-6）：");
             String choice = scanner.nextLine().trim();
 
             switch (choice) {
@@ -168,16 +168,15 @@ private static void editTodo() {
                     deleteTodo();
                     break;
                 case "5":
-                    editTodo(); // 新增编辑分支
+                    editTodo(); // 5号对应编辑
                     break;
-                case "6": // 原5改成6
-                System.out.println("👋 退出程序，再见！");
-                scanner.close();
-                System.exit(0);
+                case "6":
+                    System.out.println("👋 退出程序，再见！");
+                    scanner.close();
+                    System.exit(0);
                 default:
-                    System.out.println("❌ 输入错误，请输入1-5的数字！");
+                    System.out.println("❌ 输入错误，请输入1-6的数字！");
             }
         }
     }
-
 }
