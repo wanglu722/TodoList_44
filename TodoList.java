@@ -18,6 +18,11 @@ class TodoItem {
         return content;
     }
 
+    // 新增：编辑功能需要的setter
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public boolean isCompleted() {
         return isCompleted;
     }
@@ -39,6 +44,8 @@ public class TodoList {
         System.out.println("2. 查看所有待办");
         System.out.println("3. 标记待办为完成");
         System.out.println("4. 删除待办事项");
+        System.out.println("5. 编辑待办事项"); // 原代码的“5.退出”被改成编辑
+        System.out.println("6. 退出程序"); // 新增退出项
         System.out.println("5. 批量删除待办"); // 与feature/edit的“5.编辑”冲突
         System.out.println("6. 退出程序"); // 看似相同，但菜单含义冲突
         System.out.println("========================");
@@ -120,6 +127,32 @@ public class TodoList {
         }
     }
 
+    // 新增：编辑待办功能
+    private static void editTodo() {
+        if (todoList.isEmpty()) {
+            System.out.println("📄 暂无待办事项～");
+            return;
+        }
+        viewTodos();
+        System.out.print("请输入要编辑的待办序号：");
+        try {
+            int index = Integer.parseInt(scanner.nextLine()) - 1;
+            if (index >= 0 && index < todoList.size()) {
+                TodoItem item = todoList.get(index);
+                System.out.print("当前内容：" + item.getContent() + "，请输入新内容：");
+                String newContent = scanner.nextLine().trim();
+                if (newContent.isEmpty()) {
+                    System.out.println("❌ 新内容不能为空！");
+                    return;
+                }
+                item.setContent(newContent);
+                System.out.println("✏️ 已编辑待办，新内容：" + newContent);
+            } else {
+                System.out.println("❌ 序号不存在！");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("❌ 请输入有效的数字！");
+        }
     // 新增：批量删除功能（与feature/edit的editTodo冲突）
     private static void batchDeleteTodo() {
         if (todoList.isEmpty()) {
@@ -155,6 +188,7 @@ public class TodoList {
                     deleteTodo();
                     break;
                 case "5":
+                    editTodo(); // 5号对应编辑
                     batchDeleteTodo(); // 与feature/edit的“5.editTodo”冲突
                     break;
                 case "6":
