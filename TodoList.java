@@ -36,18 +36,18 @@ public class TodoList {
     private static List<TodoItem> todoList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
-    // 显示功能菜单
     private static void showMenu() {
-        System.out.println("\n===== 待办事项管理 =====");
-        System.out.println("1. 添加待办事项");
-        System.out.println("2. 查看所有待办");
-        System.out.println("3. 标记待办为完成");
-        System.out.println("4. 删除待办事项");
-        System.out.println("5. 编辑待办事项"); // 新增
-        System.out.println("6. 退出程序"); // 原5改成6
-        System.out.println("========================");
+    System.out.println("\n===== 待办事项管理 =====");
+    System.out.println("1. 添加待办事项");
+    System.out.println("2. 查看所有待办");
+    System.out.println("3. 标记待办为完成");
+    System.out.println("4. 删除待办事项");
+    // 与add-edit-function分支的"5.编辑待办"冲突：故意用不同编号
+    System.out.println("5. 退出程序"); 
+    System.out.println("6. 编辑待办事项"); // 这里与编辑分支的编号相反
+    System.out.println("========================");
     }
-
+    
     // 添加待办
     private static void addTodo() {
         System.out.print("请输入待办事项内容：");
@@ -189,4 +189,5 @@ private static void editTodo() {
     }
 
 }
+
 
