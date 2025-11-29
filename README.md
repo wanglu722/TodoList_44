@@ -1,5 +1,7 @@
 # TodoList_44
 Java命令行待办事项管理工具
+<img width="936" height="388" alt="image" src="https://github.com/user-attachments/assets/c9bab4ed-de6e-4ba0-87a6-cb7b819262b9" />
+
 
 ## 功能说明
 - 添加待办事项（支持输入标题和描述）
